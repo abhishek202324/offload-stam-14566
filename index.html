@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OFFLOAD | AI Real-Time Stress & Trauma Assessment (NHAA 14566)</title>
+  <meta name="description" content="OFFLOAD - Release your thoughts. Find your flow. AI-Enabled Real-Time Stress and Trauma Assessment Module for National Helpline Against Atrocities (NHAA 14566), Department of Social Justice & Empowerment. Smart India Hackathon (SIH) Edition.">
+  <meta name="theme-color" content="#0F172A">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/citizen.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/mobile-mockup.css">
+</head>
+<body>
+
+  <!-- ================= TOP EMERGENCY & DISCREET ESCAPE BAR ================= -->
+  <aside class="emergency-top-bar" id="emergencyTopBar" aria-label="Emergency quick access bar">
+    <div class="emergency-left">
+      <div class="helpline-badge">
+        <span class="pulse-dot"></span>
+        <span>NHAA 14566</span>
+      </div>
+      <span class="helpline-text">National Helpline Against Atrocities: <strong>14566</strong> (Dept of Social Justice & Empowerment, GoI)</span>
+      <button class="btn-text-mic trigger-helpline" style="color: #93C5FD; font-weight:700; cursor:pointer;" id="btnCallTop">📞 Call 14566 Demo</button>
+    </div>
+    <div class="emergency-right">
+      <button class="btn-discreet trigger-discreet" id="btnDiscreetTop" title="Disguise screen immediately (Press Esc)">
+        🛡️ Quick Disguise (Esc)
+      </button>
+      <button class="btn-sos-quick trigger-sos" id="btnSosTop">
+        🚨 Emergency SOS
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN NAVIGATION ================= -->
+  <header class="main-header" id="mainHeader">
+    <nav class="nav-container" aria-label="Main Navigation">
+      <!-- OFFLOAD Brand Logo (Soaring Digital Dove / Pigeon with Circuit Feathers) -->
+      <div class="brand-logo-container" id="brandLogoBtn" onclick="window.app.switchView('citizen')">
+        <div class="logo-symbol">
+          <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Soaring Dove with Circuit Nodes -->
+            <path d="M78 28C68 32 58 24 50 34C44 42 42 52 46 62C42 60 36 54 32 46C28 38 26 28 20 22C24 34 32 46 36 58C32 60 26 62 20 64C28 66 38 64 44 70C36 72 26 76 18 82C30 80 44 76 54 80C62 82 72 80 80 72C76 66 70 62 66 54C62 46 68 38 78 28Z" stroke="#0F172A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M50 34L40 38" stroke="#0F172A" stroke-width="2.5"/>
+            <circle cx="40" cy="38" r="2.5" fill="#2563EB"/>
+            <path d="M46 44L36 48" stroke="#0F172A" stroke-width="2.5"/>
+            <circle cx="36" cy="48" r="2.5" fill="#2563EB"/>
+            <path d="M48 54L38 58" stroke="#0F172A" stroke-width="2.5"/>
+            <circle cx="38" cy="58" r="2.5" fill="#2563EB"/>
+            <path d="M54 64L48 70" stroke="#0F172A" stroke-width="2.5"/>
+            <circle cx="48" cy="70" r="2.5" fill="#2563EB"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title">
+            OFFLOAD <span class="badge-tag">STAM 14566</span>
+          </div>
+          <div class="brand-subline">RELEASE YOUR THOUGHTS. FIND YOUR FLOW.</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="nav-tabs" role="tablist">
+        <button class="nav-tab-btn active" data-tab="citizen" id="tabCitizen" role="tab">
+          🕊️ Citizen Portal
+        </button>
+        <button class="nav-tab-btn" data-tab="caseworker" id="tabCaseworker" role="tab">
+          🛡️ SVI Command Dashboard <span class="badge-live">LIVE</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="mobile" id="tabMobile" role="tab">
+          📱 Mobile App OS
+        </button>
+        <button class="nav-tab-btn" data-tab="ecosystem" id="tabEcosystem" role="tab">
+          🗺️ PoA Protection Map
+        </button>
+        <button class="nav-tab-btn" data-tab="handbook" id="tabHandbook" role="tab">
+          ⚖️ Statutory Relief Scales
+        </button>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button class="btn-settings-pill" id="btnOpenSettings" title="Configure Gemini API & Voice Tuning">
+          ⚙️ <span id="geminiKeyStatusBadge">AI & Voice Settings</span>
+        </button>
+        <select class="lang-select" id="langSelect" aria-label="Select Language">
+          <option value="en">English</option>
+          <option value="hi">हिंदी (Hindi)</option>
+          <option value="hinglish">Hinglish</option>
+        </select>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= MAIN APP VIEW CONTAINER ================= -->
+  <main class="app-container" id="appMain">
+
+    <!-- ================= VIEW 1: CITIZEN PORTAL ================= -->
+    <section class="tab-view active" id="view-citizen" aria-labelledby="tabCitizen">
+      
+      <!-- HERO BANNER -->
+      <div class="citizen-hero">
+        <div class="hero-content-grid">
+          <div class="hero-text-side">
+            <div class="hero-badge-pill">
+              <span class="pill-tag">Ministry of Social Justice & Empowerment</span>
+              <span>NHAA 14566 • Support • Protect • Empower</span>
+            </div>
+            <h1 class="hero-title">
+              Release Your Thoughts.<br>
+              <span class="highlight">Find Your Flow.</span>
+            </h1>
+            <p class="hero-desc">
+              AI-enabled standardized psychological stress, trauma, fear, and vulnerability assessment for victims and complainants approaching NHAA 14566 across voice, IVRS, chatbot, and mobile interfaces.
+            </p>
+            <div class="hero-quote-box">
+              "Ensuring dignified, trauma-informed justice and immediate relief under the SC/ST (PoA) Act." — <strong>You are not alone ❤️</strong>
+            </div>
+            <div class="hero-cta-group">
+              <button class="btn-primary-hero" onclick="document.getElementById('aiCompanionSection').scrollIntoView({behavior:'smooth'})">
+                💬 Begin AI Psychological Triage
+              </button>
+              <button class="btn-secondary-hero trigger-helpline">
+                📞 Call 14566 Helpline Demo
+              </button>
+              <button class="btn-secondary-hero" onclick="document.getElementById('incidentWizardSection').scrollIntoView({behavior:'smooth'})">
+                📝 Lodge PoA Atrocity Complaint
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-visual-side">
+            <div class="hero-visual-card">
+              <img src="assets/hero_banner.jpg" alt="OFFLOAD AI Empowering Support Platform" class="hero-banner-img">
+              <div class="hero-floating-pill">
+                <div>
+                  <strong>STAM Emotion & Speech AI Active</strong>
+                  <div style="font-size:0.72rem; color:#DDD;" id="citizenLiveLocBadge">📍 Detecting Live GPS...</div>
+                </div>
+                <span style="color:#34D399; font-weight:700;">● Live SVI Triage</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 ACCESS CHANNELS -->
+      <div class="section-heading-center">
+        <span class="section-pill-tag">Multi-Channel Access</span>
+        <h2 class="section-main-title">Standardized First-Contact Triage</h2>
+        <p class="section-subtitle">Real-time Stress Vulnerability Index (SVI) assessment across all digital and voice touchpoints.</p>
+      </div>
+
+      <div class="channels-grid">
+        <!-- Channel 1: Helpline -->
+        <div class="channel-card helpline trigger-helpline" id="cardChannelHelpline">
+          <div class="channel-icon-wrap">📞</div>
+          <div class="channel-info">
+            <h3>NHAA Helpline 14566</h3>
+            <p>Voice interaction with real-time speech analytics, pause detection, and pitch jitter extraction.</p>
+            <span class="channel-action-text">Call 14566 Demo →</span>
+          </div>
+        </div>
+
+        <!-- Channel 2: Mobile App -->
+        <div class="channel-card mobile" id="cardChannelMobile" onclick="window.app.switchView('mobile')">
+          <div class="channel-icon-wrap">📱</div>
+          <div class="channel-info">
+            <h3>Mobile Application OS</h3>
+            <p>Voice notes, interactive chatbot, one-touch panic beacon, and offline SMS fallback.</p>
+            <span class="channel-action-text">Open Mobile Demo →</span>
+          </div>
+        </div>
+
+        <!-- Channel 3: Web Portal -->
+        <div class="channel-card web" id="cardChannelWeb" onclick="document.getElementById('incidentWizardSection').scrollIntoView({behavior:'smooth'})">
+          <div class="channel-icon-wrap">🌐</div>
+          <div class="channel-info">
+            <h3>Integrated Web Portal</h3>
+            <p>Direct complaint filing, evidence locker, PoA relief tracking, and DLSA legal aid.</p>
+            <span class="channel-action-text">Lodge Incident →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 KEY FACILITIES SECTION -->
+      <div class="facilities-section">
+        <div style="text-align:center;">
+          <div class="facilities-banner-header">Key Facilities in Our STAM Architecture</div>
+        </div>
+
+        <div class="facilities-grid-6">
+          <!-- Facility 1: Multi-Channel Access -->
+          <div class="facility-card f-pink">
+            <div class="facility-header">
+              <div class="f-icon-circle">📞</div>
+              <h4>Multi-Channel Access</h4>
+            </div>
+            <ul>
+              <li>National Helpline (14566 IVRS)</li>
+              <li>Mobile App (Text/Voice/Chat)</li>
+              <li>Integrated Web Portal</li>
+            </ul>
+          </div>
+
+          <!-- Facility 2: Speech & Emotion AI -->
+          <div class="facility-card f-blue">
+            <div class="facility-header">
+              <div class="f-icon-circle">🧠</div>
+              <h4>Speech & Emotion AI</h4>
+            </div>
+            <ul>
+              <li>NLP Trauma Engine</li>
+              <li>Pitch Jitter & Tremor Analytics</li>
+              <li>Hesitation & Pause Detection</li>
+              <li>Multilingual & Dialect Support</li>
+            </ul>
+          </div>
+
+          <!-- Facility 3: Secure Data Layer -->
+          <div class="facility-card f-green">
+            <div class="facility-header">
+              <div class="f-icon-circle">🔒</div>
+              <h4>Secure Data Layer</h4>
+            </div>
+            <ul>
+              <li>End-to-End Encryption</li>
+              <li>Victim Confidentiality & Consent</li>
+              <li>Ethical AI Governance Standards</li>
+            </ul>
+          </div>
+
+          <!-- Facility 4: Stress Vulnerability Engine -->
+          <div class="facility-card f-amber">
+            <div class="facility-header">
+              <div class="f-icon-circle">📊</div>
+              <h4>Stress Vulnerability Index</h4>
+            </div>
+            <ul>
+              <li>Calculates SVI (Scale 0-100)</li>
+              <li>Trauma, Fear & Anxiety Indexing</li>
+              <li>Suicidal Ideation Red-Flagging</li>
+            </ul>
+          </div>
+
+          <!-- Facility 5: Smart Risk Categorization -->
+          <div class="facility-card f-rose">
+            <div class="facility-header">
+              <div class="f-icon-circle">🔔</div>
+              <h4>Smart Prioritization</h4>
+            </div>
+            <ul>
+              <li>Low / Moderate / High / Critical Triage</li>
+              <li>Automated Multi-Agency Dispatch</li>
+              <li>Explainable Forensic Indicators</li>
+            </ul>
+          </div>
+
+          <!-- Facility 6: Multi-Agency Redressal -->
+          <div class="facility-card f-purple">
+            <div class="facility-header">
+              <div class="f-icon-circle">👥</div>
+              <h4>Multi-Agency Support</h4>
+            </div>
+            <ul>
+              <li>Tele-MANAS Psychological Counseling</li>
+              <li>Witness Protection Escort Orders</li>
+              <li>PoA Statutory Relief Disbursement</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CITIZEN WORKSPACE: AI STAM COMPANION + INCIDENT REPORTING WIZARD -->
+      <div class="citizen-workspace-grid">
+        
+        <!-- COMPONENT 1: SAKSHAM AI STAM COMPANION (VOICE & TEXT) -->
+        <div class="ai-companion-box" id="aiCompanionSection">
+          <div class="chat-box-header">
+            <div class="chat-bot-avatar">
+              <div class="bot-avatar-circle">🕊️</div>
+              <div>
+                <div class="bot-info-title">OFFLOAD STAM Companion</div>
+                <div class="bot-info-sub">Real-Time Psychological Triage • NHAA 14566</div>
+              </div>
+            </div>
+            <div class="chat-header-actions">
+              <button class="btn-icon-header" id="btnVoiceToggle" title="Mute/Unmute Audio">🔊</button>
+            </div>
+          </div>
+
+          <!-- Live Distress Analysis Ticker -->
+          <div class="ai-distress-ticker">
+            <div class="ticker-meter">
+              <span>SVI Index:</span>
+              <div class="meter-bar">
+                <div class="meter-fill" id="distressMeterFill"></div>
+              </div>
+              <span id="distressMeterText">SVI: <strong>12/100 (LOW RISK)</strong></span>
+            </div>
+            <span style="color:var(--green-text); font-weight:600; font-size:0.75rem;">🔒 Confidential Session</span>
+          </div>
+
+          <!-- Chat Messages Area -->
+          <div class="chat-messages-container" id="chatMessages">
+            <div class="chat-msg bot">
+              <div class="msg-bubble">
+                Namaste. I am your <strong>OFFLOAD Support Assistant</strong> for the <strong>National Helpline Against Atrocities (14566 - NHAA)</strong>, Department of Social Justice & Empowerment.
+                <br><br>
+                Release your thoughts. You are in a safe, confidential space. Please share your grievance, or ask any questions regarding <strong>SC/ST (PoA) Act legal protections, statutory victim compensation, witness protection, or Tele-MANAS psychological counseling</strong>.
+                <span class="msg-timestamp">Live</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Prompts -->
+          <div class="chat-quick-prompts">
+            <button class="prompt-chip" data-prompt="Panchayat imposed social boycott on our community and stopped drinking water">🚫 Social Boycott / Water Denial</button>
+            <button class="prompt-chip" data-prompt="Dominant caste landlords forcefully occupied our land and beat us">🌾 Land Alienation & Assault</button>
+            <button class="prompt-chip" data-prompt="Threatened with death if I give witness testimony in Special Court">🛡️ Witness Protection Request</button>
+            <button class="prompt-chip" data-prompt="Police incharge refused to lodge FIR in atrocity case">⚖️ Zero FIR / PoA Sec 4 Warning</button>
+            <button class="prompt-chip" data-prompt="Feeling extreme mental trauma and suicidal thoughts">🏥 Tele-MANAS Crisis Counseling</button>
+          </div>
+
+          <!-- Chat Input -->
+          <div class="chat-input-area">
+            <input type="text" class="chat-input-box" id="chatInput" placeholder="Share your experience or ask any question confidentially..." aria-label="Type message">
+            <button class="btn-mic-voice" id="btnMicChat" title="Click to speak with microphone">🎤</button>
+            <button class="btn-send-chat" id="btnSendChat" title="Send message">➤</button>
+          </div>
+        </div>
+
+        <!-- COMPONENT 2: SMART INCIDENT REPORTING WIZARD -->
+        <div class="incident-wizard-box" id="incidentWizardSection">
+          <div class="wizard-header">
+            <h3>📝 Lodge SC/ST PoA Atrocity Report</h3>
+            <span class="step-indicator" id="stepIndicator">Step 1 of 4</span>
+          </div>
+
+          <div class="wizard-body">
+            <!-- STEP 1: CATEGORY -->
+            <div class="wizard-step active" id="wizardStep1">
+              <div class="form-group-custom">
+                <label class="form-label-custom">Select Atrocity Category under PoA Act 1989</label>
+                <div class="category-selection-grid">
+                  <button type="button" class="category-btn selected" data-category="Social Boycott & Water Denial (PoA Sec 3(1)(zc))">
+                    <span>🚫</span> Social / Economic Boycott
+                  </button>
+                  <button type="button" class="category-btn" data-category="Land Alienation & Crop Damage (PoA Sec 3(1)(f)(g))">
+                    <span>🌾</span> Land Grab / Crop Destruction
+                  </button>
+                  <button type="button" class="category-btn" data-category="Physical Assault & Caste Abuse (PoA Sec 3(1)(r)(s))">
+                    <span>⚠️</span> Casteist Abuse & Violence
+                  </button>
+                  <button type="button" class="category-btn" data-category="Witness Intimidation & Coercion (PoA Sec 15A)">
+                    <span>🛡️</span> Witness Intimidation
+                  </button>
+                  <button type="button" class="category-btn" data-category="Institutional & Academic Harassment (PoA Sec 3(1)(u))">
+                    <span>🎓</span> Educational / Workplace Bias
+                  </button>
+                  <button type="button" class="category-btn" data-category="Public Servant Neglect of Duty (PoA Sec 4)">
+                    <span>⚖️</span> Police Refused FIR
+                  </button>
+                </div>
+              </div>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin-top:16px;">
+                💡 <em>STAM automatically computes the Stress Vulnerability Index (SVI) and statutory compensation entitlement.</em>
+              </p>
+            </div>
+
+            <!-- STEP 2: INCIDENT DETAILS & VOICE TRANSCRIPTION -->
+            <div class="wizard-step" id="wizardStep2">
+              <div class="form-group-custom">
+                <label class="form-label-custom" for="incidentDescription">Incident Narrative & Vulnerability Context</label>
+                <textarea class="custom-textarea" id="incidentDescription" placeholder="Provide narrative details. You can speak freely or type in any Indian language..."></textarea>
+                <div class="voice-input-subtext">
+                  <span>AI Speech & Emotion engine detects acute trauma</span>
+                  <button type="button" class="btn-text-mic" id="btnVoiceIncident">🎤 Voice Input</button>
+                </div>
+              </div>
+
+              <div class="form-group-custom">
+                <label class="form-label-custom" for="incidentLocationInput">Incident Location / District / Real GPS</label>
+                <input type="text" class="custom-input" id="incidentLocationInput" value="Detecting Live GPS...">
+              </div>
+            </div>
+
+            <!-- STEP 3: EVIDENCE VAULT & ZERO-KNOWLEDGE ENCRYPTION -->
+            <div class="wizard-step" id="wizardStep3">
+              <div class="form-group-custom">
+                <label class="form-label-custom">Upload Supporting Evidence (Video, Audio, Medical/FIR Copies)</label>
+                <div class="evidence-dropzone" id="evidenceDropzone">
+                  <input type="file" id="evidenceFileInput" multiple style="display:none;">
+                  <div style="font-size:1.8rem; margin-bottom:6px;">📁</div>
+                  <strong style="color:var(--text-dark); font-size:0.9rem;">Click to upload or drag files here</strong>
+                  <p id="evidenceStatusText" style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">Upload evidence files (AES-256 client encrypted)</p>
+                </div>
+                <div class="encryption-badge-note">
+                  🔒 Zero-Knowledge Proof: Files are encrypted client-side to ensure victim confidentiality.
+                </div>
+              </div>
+
+              <div class="anonymous-toggle-card">
+                <div>
+                  <strong style="font-size:0.85rem; color:var(--text-dark); display:block;">Confidential Witness Mode</strong>
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Masks identity from unauthorized public viewing</span>
+                </div>
+                <label class="switch-toggle" aria-label="Toggle confidential filing">
+                  <input type="checkbox" id="anonymousToggle" checked>
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- STEP 4: REVIEW & SVI TRIAGE PREVIEW -->
+            <div class="wizard-step" id="wizardStep4">
+              <div class="form-group-custom">
+                <label class="form-label-custom">Review & Real-Time SVI Trauma Assessment</label>
+                <div id="step4ReviewBox"></div>
+              </div>
+              <p style="font-size:0.78rem; color:var(--text-muted);">
+                Submitting routes this case directly to the <strong>NHAA 14566 Command Center & District DM/SP SC/ST Protection Cell</strong>.
+              </p>
+            </div>
+
+            <!-- SUCCESS STATE -->
+            <div class="wizard-step" id="wizardStepSuccess">
+              <div class="wizard-success-state">
+                <div class="success-shield-icon">🕊️</div>
+                <h3 style="color:var(--text-dark); margin-bottom:6px;">Grievance Successfully Registered</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Assigned to NHAA 14566 Command Queue with automatic statutory compensation escalation.</p>
+                <div class="case-id-badge" id="generatedCaseId">NHAA-2026-8812</div>
+                <p style="font-size:0.78rem; color:var(--green-text); font-weight:600;">Save this Reference ID to track status with the District Administration.</p>
+                <div style="margin-top:18px; display:flex; gap:10px; justify-content:center;">
+                  <button class="btn-secondary" onclick="window.citizenPortal.resetWizard()">Submit Another Grievance</button>
+                  <button class="btn-primary" onclick="window.app.switchView('caseworker')">View in SVI Command Center →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-footer">
+            <button type="button" class="btn-wizard-prev" id="btnWizardPrev" style="display:none;">← Previous</button>
+            <div style="flex:1;"></div>
+            <button type="button" class="btn-wizard-next" id="btnWizardNext">Next Step →</button>
+            <button type="button" class="btn-wizard-submit" id="btnWizardSubmit" style="display:none;">🔒 Submit Encrypted Grievance</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: SVI CASEWORKER & STAKEHOLDER COMMAND DASHBOARD ================= -->
+    <section class="tab-view" id="view-caseworker" aria-labelledby="tabCaseworker">
+      <div class="dashboard-container">
+        
+        <!-- DASHBOARD HEADER -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <h2 style="font-size:1.8rem; color:var(--text-dark);">🛡️ SVI & Trauma Assessment Command Dashboard</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Department of Social Justice & Empowerment • National Helpline Against Atrocities (14566)</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" onclick="window.caseworkerDashboard.renderQueue(); window.app.showToast('Queue refreshed', 'info');">🔄 Refresh Live Feed</button>
+            <button class="btn-danger trigger-sos">🚨 Manual SOS Broadcast</button>
+          </div>
+        </div>
+
+        <!-- STATS KPI ROW -->
+        <div class="stats-row">
+          <div class="stat-card critical">
+            <div class="stat-info-group">
+              <h4>Critical SVI Alerts (>85)</h4>
+              <div class="stat-value" id="statCriticalCount">2</div>
+              <span class="stat-trend up">🔴 Emergency SP Escalation</span>
+            </div>
+            <div class="stat-icon-bubble">🚨</div>
+          </div>
+
+          <div class="stat-card active-cases">
+            <div class="stat-info-group">
+              <h4>Active Triage Cases</h4>
+              <div class="stat-value" id="statActiveCount">5</div>
+              <span class="stat-trend neutral">⚡ Live NHAA Queue</span>
+            </div>
+            <div class="stat-icon-bubble">📋</div>
+          </div>
+
+          <div class="stat-card resolved">
+            <div class="stat-info-group">
+              <h4>PoA Relief Disbursed</h4>
+              <div class="stat-value" id="statResolvedCount">28</div>
+              <span class="stat-trend down">🟢 ₹1.14 Cr Total</span>
+            </div>
+            <div class="stat-icon-bubble">✅</div>
+          </div>
+
+          <div class="stat-card avg-time">
+            <div class="stat-info-group">
+              <h4>Avg. SVI Triage Speed</h4>
+              <div class="stat-value" id="statAvgTime">1.4 mins</div>
+              <span class="stat-trend down">⏱️ Real-time first contact</span>
+            </div>
+            <div class="stat-icon-bubble">⚡</div>
+          </div>
+        </div>
+
+        <!-- MAIN 2-COLUMN DASHBOARD (LIVE QUEUE + SVI INSPECTOR) -->
+        <div class="dashboard-main-grid">
+          
+          <!-- LEFT: LIVE QUEUE -->
+          <div class="queue-panel">
+            <div class="panel-header-toolbar">
+              <h3><span>📥</span> Live Atrocity & Distress Queue</h3>
+              <div class="queue-filters">
+                <button class="filter-chip-btn active" data-filter="all">All</button>
+                <button class="filter-chip-btn" data-filter="critical">Critical</button>
+                <button class="filter-chip-btn" data-filter="high">High</button>
+                <button class="filter-chip-btn" data-filter="moderate">Moderate</button>
+                <button class="filter-chip-btn" data-filter="resolved">Resolved</button>
+              </div>
+            </div>
+
+            <div class="queue-list-container" id="caseworkerQueueList">
+              <!-- Dynamically rendered by caseworkerDashboard.js -->
+            </div>
+          </div>
+
+          <!-- RIGHT: EXPLAINABLE SVI INSPECTOR -->
+          <div class="inspector-panel">
+            <div class="inspector-header">
+              <div class="inspector-title-group">
+                <h3 id="inspCaseId">Case #NHAA-2026-8812</h3>
+                <span style="font-size:0.75rem; color:#CBD5E1;" id="inspCategory">Social Boycott</span>
+              </div>
+              <span class="badge-risk critical" id="inspRiskBadge">SVI: 94 - CRITICAL</span>
+            </div>
+
+            <div class="inspector-body">
+              <!-- Citizen Info Banner -->
+              <div style="background:#F8FAFC; border:1px solid var(--border-subtle); border-radius:8px; padding:12px 16px; font-size:0.85rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                  <span><strong>Complainant:</strong> <span id="inspCallerName">Rameshwar M.</span></span>
+                  <span><strong>Contact:</strong> <span id="inspContact">+91 94140-XXXXX</span></span>
+                </div>
+                <div><strong>Location:</strong> <span id="inspLocation">Village Rampur, Hathras, UP</span></div>
+              </div>
+
+              <!-- Multi-Dimensional Stress Vulnerability Sub-Indices -->
+              <div class="ai-assessment-box">
+                <div class="assessment-title">
+                  <span>🧠 Multi-Dimensional Trauma Profile (SVI Index)</span>
+                  <span style="color:var(--brand-blue); font-size:0.78rem;">Confidence: 95.8%</span>
+                </div>
+                
+                <div class="radar-bars-grid" style="grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                  <div class="radar-metric">
+                    <div class="radar-label">Acute Trauma</div>
+                    <div class="radar-value" id="inspTraumaVal">92%</div>
+                    <div class="mini-bar"><div class="mini-bar-fill" id="inspTraumaBar" style="width:92%; background:#DC2626;"></div></div>
+                  </div>
+                  <div class="radar-metric">
+                    <div class="radar-label">Fear / Threat</div>
+                    <div class="radar-value" id="inspFearVal">98%</div>
+                    <div class="mini-bar"><div class="mini-bar-fill" id="inspFearBar" style="width:98%; background:#DC2626;"></div></div>
+                  </div>
+                  <div class="radar-metric">
+                    <div class="radar-label">Anxiety / Stress</div>
+                    <div class="radar-value" id="inspAnxietyVal">88%</div>
+                    <div class="mini-bar"><div class="mini-bar-fill" id="inspAnxietyBar" style="width:88%; background:#EA580C;"></div></div>
+                  </div>
+                  <div class="radar-metric">
+                    <div class="radar-label">Suicide Ideation</div>
+                    <div class="radar-value" id="inspSuicideVal">75%</div>
+                    <div class="mini-bar"><div class="mini-bar-fill" id="inspSuicideBar" style="width:75%; background:#DC2626;"></div></div>
+                  </div>
+                  <div class="radar-metric">
+                    <div class="radar-label">Social Isolation</div>
+                    <div class="radar-value" id="inspIsolationVal">96%</div>
+                    <div class="mini-bar"><div class="mini-bar-fill" id="inspIsolationBar" style="width:96%; background:#DC2626;"></div></div>
+                  </div>
+                  <div class="radar-metric">
+                    <div class="radar-label">Acoustic Stress</div>
+                    <div class="radar-value">90%</div>
+                    <div class="mini-bar"><div class="mini-bar-fill" style="width:90%; background:#2563EB;"></div></div>
+                  </div>
+                </div>
+
+                <div style="font-size:0.78rem; font-weight:700; color:var(--text-dark); margin-top:10px;">Forensic Keywords Flagged:</div>
+                <div class="keywords-tag-container" id="inspKeywords">
+                  <!-- Keywords rendered dynamically -->
+                </div>
+              </div>
+
+              <!-- Speech Analytics & Acoustic Jitter -->
+              <div style="background:#F8FAFC; border:1px solid var(--border-subtle); border-radius:8px; padding:12px 14px; font-size:0.8rem;">
+                <strong style="color:var(--text-dark); display:block; margin-bottom:6px;">🎙️ Speech Analytics & Vocal Biomarkers:</strong>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                  <div>Speech Rate: <strong id="inspAudioPitch">Rapid / Stuttering</strong></div>
+                  <div>Hesitation Pauses: <strong id="inspAudioTremor">6 prolonged (>2.8s)</strong></div>
+                  <div style="grid-column:span 2;">Acoustic Environment: <strong id="inspAudioNoise">Aggressive shouting outside</strong></div>
+                </div>
+              </div>
+
+              <!-- Sentiment Trajectory Canvas -->
+              <div class="sentiment-trajectory-box">
+                <div class="trajectory-header">
+                  <span>📈 Interaction Distress Trajectory</span>
+                  <span style="font-size:0.72rem; color:var(--text-muted);">Real-time slope</span>
+                </div>
+                <canvas class="trajectory-canvas" id="trajectoryCanvas"></canvas>
+              </div>
+
+              <!-- Summary & Transcript Timeline -->
+              <div class="transcript-timeline-box">
+                <div class="transcript-header">
+                  <span>💬 Interaction Transcript</span>
+                  <span style="font-size:0.72rem; color:var(--text-muted);">Encrypted Stream</span>
+                </div>
+                <div class="transcript-items" id="inspTranscript">
+                  <!-- Transcript rendered dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Multi-Agency Action Dispatch Matrix -->
+            <div class="inspector-actions-grid" style="grid-template-columns: repeat(3, 1fr);">
+              <button class="btn-dispatch pcr" id="btnDispatchPcr">
+                <span>🚨</span> Dispatch Armed Escort
+              </button>
+              <button class="btn-dispatch sakhi" id="btnDispatchSakhi">
+                <span>🏥</span> Tele-MANAS (14416) Link
+              </button>
+              <button class="btn-dispatch fir" id="btnPoaRelief" style="background:#FFFBEB; color:#92400E; border:1px solid #FEF3C7;">
+                <span>💰</span> PoA Relief Calculator
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS & INSIGHTS ROW -->
+        <div class="analytics-section-grid">
+          <div class="analytics-chart-card">
+            <h4>📊 Hourly Atrocity Distress Trends</h4>
+            <p>Real-time distress volume distribution across 24-hour cycle</p>
+            <canvas class="chart-canvas" id="analyticsDistressChart"></canvas>
+          </div>
+
+          <div class="analytics-chart-card">
+            <h4>📌 Atrocity Classification Breakdown</h4>
+            <p>Categorical distribution across SC/ST PoA offences</p>
+            <canvas class="chart-canvas" id="analyticsCategoryChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: DEEPLY CODED MOBILE APP SIMULATOR ================= -->
+    <section class="tab-view" id="view-mobile" aria-labelledby="tabMobile">
+      <div class="mobile-preview-section">
+        <div class="mobile-preview-layout">
+          
+          <!-- LEFT CALLOUTS -->
+          <div class="mobile-feature-callouts">
+            <div class="callout-card left">
+              <h4><span>🚨</span> 3-Second Hold Panic Beacon</h4>
+              <p>Triggers immediate silent location broadcast to nearest SP SC/ST Cell and PCR Patrol with progress ring.</p>
+            </div>
+            <div class="callout-card left">
+              <h4><span>🎙️</span> Vocal Stress & Waveform Lab</h4>
+              <p>Real-time audio recording with speech hesitation counter, pitch jitter extractor, and SVI estimate.</p>
+            </div>
+            <div class="callout-card left">
+              <h4><span>💬</span> Full Interactive Mobile Chat</h4>
+              <p>Communicate with OFFLOAD STAM AI assistant with multi-turn trauma-informed counseling.</p>
+            </div>
+          </div>
+
+          <!-- SMARTPHONE MOCKUP FRAME (DEEPLY CODED OS) -->
+          <div class="smartphone-frame">
+            <div class="phone-island">
+              <div class="island-camera"></div>
+              <div style="color:#555; font-size:0.6rem;">NHAA 14566</div>
+              <div class="island-live-dot"></div>
+            </div>
+
+            <div class="phone-screen">
+              <!-- Status Bar -->
+              <div class="phone-status-bar">
+                <span id="phoneClock">9:41</span>
+                <span>5G 📶 100% 🔋</span>
+              </div>
+
+              <!-- App Header inside Phone -->
+              <div class="phone-app-header">
+                <div class="phone-logo-text">
+                  <span>🕊️</span> OFFLOAD
+                </div>
+                <button class="btn-discreet trigger-discreet" style="font-size:0.7rem; padding:2px 8px;">Disguise</button>
+              </div>
+
+              <!-- ================= SCREEN 1: HOME VIEW ================= -->
+              <div class="phone-screen-view active" id="phone-view-home">
+                <div class="phone-home-body">
+                  <div class="phone-hero-banner">
+                    <p class="sub">Release Your Thoughts</p>
+                    <h3>Find Your Flow</h3>
+                    <p style="font-size:0.75rem; color:#CBD5E1; margin-top:2px;">NHAA 14566 Psychological Support</p>
+                  </div>
+
+                  <!-- Quick SVI Score Gauge -->
+                  <div class="phone-svi-gauge-card">
+                    <div class="phone-svi-header">
+                      <span>Daily SVI Triage Status</span>
+                      <span style="color:#059669;">Stable (15/100)</span>
+                    </div>
+                    <div class="phone-svi-progress">
+                      <div class="phone-svi-fill"></div>
+                    </div>
+                    <small style="color:var(--text-muted); font-size:0.68rem;">Normal baseline. Tap Voice Lab to test vocal stress.</small>
+                  </div>
+
+                  <!-- Emergency SOS Trigger Button -->
+                  <div class="phone-sos-slide-btn phone-nav-trigger" data-phone-tab="sos">
+                    <div>
+                      <div style="font-size:0.85rem;">🚨 EMERGENCY SOS</div>
+                      <span style="font-size:0.68rem; opacity:0.9;">Hold 3s to broadcast live GPS</span>
+                    </div>
+                    <span style="font-size:1.2rem;">➔</span>
+                  </div>
+
+                  <!-- Quick Grid Actions -->
+                  <div class="phone-quick-actions">
+                    <div class="phone-act-btn phone-nav-trigger" data-phone-tab="chat">
+                      <span class="icon">💬</span>
+                      <span>AI Sathi Chat</span>
+                    </div>
+                    <div class="phone-act-btn phone-nav-trigger" data-phone-tab="voice">
+                      <span class="icon">🎙️</span>
+                      <span>Voice Stress Lab</span>
+                    </div>
+                    <div class="phone-act-btn phone-nav-trigger" data-phone-tab="places">
+                      <span class="icon">📍</span>
+                      <span>Safe Shelters</span>
+                    </div>
+                    <div class="phone-act-btn trigger-helpline">
+                      <span class="icon">📞</span>
+                      <span>Call 14566</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ================= SCREEN 2: CHAT VIEW ================= -->
+              <div class="phone-screen-view" id="phone-view-chat">
+                <div class="phone-chat-messages" id="phoneChatMessages">
+                  <div class="phone-bubble bot">Namaste. You are in a safe, encrypted space. What happened?</div>
+                  <div class="phone-bubble user">Someone from dominant group is threatening our family.</div>
+                  <div class="phone-bubble bot">SVI Index 82 (High). You have complete protection under SC/ST PoA Act Sec 15A. Armed security escort standing by.</div>
+                </div>
+                <div class="phone-chat-input-bar">
+                  <input type="text" class="phone-input" id="phoneChatInput" placeholder="Type confidential message...">
+                  <button class="phone-btn-send" id="phoneBtnSend">➤</button>
+                </div>
+              </div>
+
+              <!-- ================= SCREEN 3: VOICE AUDIO LAB VIEW ================= -->
+              <div class="phone-screen-view" id="phone-view-voice">
+                <div class="phone-voice-body">
+                  <div style="font-size:0.85rem; font-weight:700; color:var(--text-dark);">🎙️ Real-Time Vocal Biomarker Lab</div>
+                  <p style="font-size:0.72rem; color:var(--text-muted);">Detects speech hesitation pauses, pitch jitter, and vocal stress.</p>
+
+                  <canvas class="voice-wave-canvas" id="phoneWaveCanvas"></canvas>
+
+                  <button class="btn-phone-mic-big" id="phoneBtnMicBig" title="Tap to start voice analysis">🎤</button>
+                  <div id="phoneVoiceStatus" style="font-size:0.75rem; font-weight:600; color:var(--text-dark);">Tap mic to speak</div>
+
+                  <div class="phone-voice-metrics-grid">
+                    <div class="phone-voice-metric">
+                      <div style="color:var(--text-muted);">Hesitation Pauses</div>
+                      <strong id="phoneHesitationCount">0 pauses</strong>
+                    </div>
+                    <div class="phone-voice-metric">
+                      <div style="color:var(--text-muted);">Pitch Jitter</div>
+                      <strong id="phoneJitterVal">Normal (+4Hz)</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ================= SCREEN 4: NEARBY SHELTERS & PROTECTION ================= -->
+              <div class="phone-screen-view" id="phone-view-places">
+                <div class="phone-places-body">
+                  <div style="font-size:0.85rem; font-weight:700; color:var(--text-dark); margin-bottom:4px;">📍 Nearby PoA Protection Cells</div>
+                  
+                  <div class="phone-place-card">
+                    <h5>District SC/ST Special Cell (SP Office)</h5>
+                    <p>Office of the Superintendent of Police • 2.4 km</p>
+                    <button class="btn-secondary" style="padding:4px 8px; font-size:0.7rem; margin-top:4px;" onclick="window.app.showToast('Connecting to District SC/ST Cell...', 'info')">📞 Direct Police Desk</button>
+                  </div>
+
+                  <div class="phone-place-card">
+                    <h5>Tele-MANAS Trauma Center (14416)</h5>
+                    <p>NIMHANS Integrated Mental Health • 24x7</p>
+                    <button class="btn-secondary" style="padding:4px 8px; font-size:0.7rem; margin-top:4px;" onclick="window.app.showToast('Connecting to Tele-MANAS...', 'info')">📞 Call 14416</button>
+                  </div>
+
+                  <div class="phone-place-card">
+                    <h5>District Legal Services Authority (DLSA)</h5>
+                    <p>Free Legal Defense & Special Court Aid • 3.1 km</p>
+                    <button class="btn-secondary" style="padding:4px 8px; font-size:0.7rem; margin-top:4px;" onclick="window.app.showToast('Connecting to DLSA Legal Aid...', 'info')">📞 Legal Advocate</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ================= SCREEN 5: 3-SECOND HOLD SOS VIEW ================= -->
+              <div class="phone-screen-view" id="phone-view-sos">
+                <div class="phone-sos-screen-body">
+                  <div style="font-size:1.1rem; font-weight:800; color:#DC2626;">🚨 EMERGENCY BEACON</div>
+                  <p style="font-size:0.78rem; color:var(--text-muted); max-width:240px;">
+                    Press and hold the button below for <strong>3 seconds</strong> to dispatch armed escort and broadcast GPS.
+                  </p>
+
+                  <div class="sos-hold-ring-container">
+                    <svg class="sos-svg-progress" viewBox="0 0 130 130">
+                      <circle cx="65" cy="65" r="60" stroke="#E2E8F0" stroke-width="6" fill="none"/>
+                      <circle class="sos-progress-bar" id="phoneProgressBar" cx="65" cy="65" r="60" stroke="#DC2626" stroke-width="6" fill="none"/>
+                    </svg>
+                    <button class="sos-hold-circle-btn" id="phoneHoldBtn">
+                      <span>HOLD</span>
+                      <small style="font-size:0.65rem; font-weight:normal;">3 SEC</small>
+                    </button>
+                  </div>
+
+                  <p style="font-size:0.72rem; color:var(--text-muted);">Transmits encrypted coordinate packet to NHAA 14566 Command Center.</p>
+                </div>
+              </div>
+
+              <!-- Bottom Nav inside Phone -->
+              <div class="phone-bottom-nav">
+                <div class="phone-nav-item active" data-phone-tab="home"><span>🕊️</span>Home</div>
+                <div class="phone-nav-item" data-phone-tab="chat"><span>💬</span>Chat</div>
+                <div class="phone-nav-item" data-phone-tab="voice"><span>🎙️</span>Voice Lab</div>
+                <div class="phone-nav-item" data-phone-tab="places"><span>📍</span>Places</div>
+                <div class="phone-nav-item" data-phone-tab="sos"><span>🚨</span>SOS</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT CALLOUTS -->
+          <div class="mobile-feature-callouts">
+            <div class="callout-card">
+              <h4><span>💰</span> PoA Compensation Tracker</h4>
+              <p>Track Stage-1 (50% on FIR) and Stage-2 relief disbursements directly into DBT account.</p>
+            </div>
+            <div class="callout-card">
+              <h4><span>📁</span> Tamper-Proof Evidence Locker</h4>
+              <p>Store encrypted photos and voice clips with cryptographic timestamp verification.</p>
+            </div>
+            <div class="callout-card">
+              <h4><span>⚡</span> Offline-Ready SMS Gateway</h4>
+              <p>Automatically transmits encrypted distress packets if mobile internet is cut off.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: SAFE SPACES & INTERACTIVE MAP ================= -->
+    <section class="tab-view" id="view-ecosystem" aria-labelledby="tabEcosystem">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+        <div>
+          <span class="section-pill-tag">Multi-Agency Ecosystem</span>
+          <h2 style="font-size:1.85rem; color:var(--text-dark); margin-top:4px;">🗺️ PoA Protection Cells & Tele-MANAS Map</h2>
+          <p style="color:var(--text-muted);">Real-time network of District SC/ST Protection Cells, Special Courts, Tele-MANAS counseling hubs, and Free Legal Aid clinics.</p>
+        </div>
+        <button class="btn-primary" id="btnRefreshLocation">📍 Detect Real GPS Location</button>
+      </div>
+
+      <!-- Real Leaflet Map Container -->
+      <div class="glass-card" style="padding:16px; margin-bottom:24px;">
+        <div id="liveSafeSpacesMap" style="width:100%; height:340px; border-radius:12px; z-index:1;"></div>
+      </div>
+
+      <div id="supportEcosystemList">
+        <!-- Rendered dynamically from MOCK_DATA.supportEcosystem -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 5: LEGAL HANDBOOK & CITIZEN RIGHTS ================= -->
+    <section class="tab-view" id="view-handbook" aria-labelledby="tabHandbook">
+      <div style="margin-bottom:28px;">
+        <span class="section-pill-tag">Statutory Entitlements</span>
+        <h2 style="font-size:1.85rem; color:var(--text-dark); margin-top:4px;">⚖️ SC/ST (PoA) Act Statutory Relief Schedule</h2>
+        <p style="color:var(--text-muted);">Mandatory relief & rehabilitation scales under Schedule Annexure-I of PoA Rules 2016 (50% payable upon FIR).</p>
+      </div>
+
+      <div class="glass-card" style="padding:24px; margin-bottom:24px;">
+        <h3 style="color:var(--text-dark); margin-bottom:16px;">💰 Statutory Relief Scales under PoA Rules 2016</h3>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="background:#FEF2F2; border-left:4px solid #DC2626; padding:14px; border-radius:0 8px 8px 0;">
+            <strong style="font-size:1rem; color:#DC2626;">1. Murder / Death of SC/ST Family Member (Sec 3(2)(v))</strong>
+            <p style="margin:4px 0 6px 0; font-size:0.85rem;"><strong>Total Relief: ₹8,50,000</strong> (₹4,25,000 on FIR/Post-mortem + ₹4,25,000 on Chargesheet)</p>
+            <small style="color:var(--text-muted);">Additional: Pension of ₹5,000/month + Govt employment / agricultural land + Free education for children.</small>
+          </div>
+
+          <div style="background:#FFF7ED; border-left:4px solid #EA580C; padding:14px; border-radius:0 8px 8px 0;">
+            <strong style="font-size:1rem; color:#EA580C;">2. Rape / Gang Rape (Sec 3(2)(v) & IPC/BNS)</strong>
+            <p style="margin:4px 0 6px 0; font-size:0.85rem;"><strong>Total Relief: ₹8,25,000</strong> (₹4,12,500 on FIR/Medical Exam + ₹4,12,500 on Chargesheet)</p>
+            <small style="color:var(--text-muted);">Additional: Complete medical treatment + Trauma counseling by Tele-MANAS + Safe shelter.</small>
+          </div>
+
+          <div style="background:#F5F3FF; border-left:4px solid #7C3AED; padding:14px; border-radius:0 8px 8px 0;">
+            <strong style="font-size:1rem; color:#7C3AED;">3. Social Boycott & Water/Road Blockade (Sec 3(1)(zc))</strong>
+            <p style="margin:4px 0 6px 0; font-size:0.85rem;"><strong>Total Relief: ₹8,25,000</strong> (₹4,12,500 on spot inspection + ₹4,12,500 on Chargesheet)</p>
+            <small style="color:var(--text-muted);">Additional: Immediate restoration of drinking water, rations, and 24/7 armed police protection by DM/SP.</small>
+          </div>
+
+          <div style="background:#ECFDF5; border-left:4px solid #059669; padding:14px; border-radius:0 8px 8px 0;">
+            <strong style="font-size:1rem; color:#059669;">4. Land Dispossession & Crop Destruction (Sec 3(1)(f)(g))</strong>
+            <p style="margin:4px 0 6px 0; font-size:0.85rem;"><strong>Total Relief: ₹4,25,000</strong> (₹2,12,500 on FIR/demarcation + ₹2,12,500 on Chargesheet)</p>
+            <small style="color:var(--text-muted);">Additional: Physical restoration of possession with police assistance at state expense.</small>
+          </div>
+        </div>
+      </div>
+
+      <div id="legalHandbookList">
+        <!-- Rendered dynamically from MOCK_DATA.legalHandbooks -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= GEMINI API & VOICE SETTINGS MODAL ================= -->
+  <div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true">
+    <div class="settings-card">
+      <div class="settings-header">
+        <h3 style="color:var(--text-dark); margin:0;">⚙️ AI Engine & Voice Tuning</h3>
+        <button id="btnCloseSettings" style="background:none; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="form-group-custom">
+        <label class="form-label-custom" for="geminiApiKeyInput">Google Gemini API Key (Optional)</label>
+        <input type="password" class="custom-input" id="geminiApiKeyInput" placeholder="Enter your Gemini API key (AIzaSy...)">
+        <small style="color:var(--text-muted); font-size:0.75rem; margin-top:4px; display:block;">
+          🔑 If entered, answers all questions via live Gemini AI. If left empty, OFFLOAD uses its built-in STAM counseling & PoA engine.
+        </small>
+      </div>
+
+      <div class="form-group-custom">
+        <label class="form-label-custom" for="geminiModelSelect">Gemini AI Model</label>
+        <select class="custom-input" id="geminiModelSelect">
+          <option value="gemini-1.5-flash">Gemini 1.5 Flash (Ultra Fast & Empathic)</option>
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash (Next-Gen Reasoning)</option>
+        </select>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border-subtle); margin:16px 0;">
+
+      <div class="form-group-custom">
+        <label class="form-label-custom" for="voiceSelect">Soothing Speech Voice</label>
+        <select class="custom-input" id="voiceSelect"></select>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px;">
+        <div>
+          <label class="form-label-custom" style="font-size:0.78rem;">Pace (Speech Rate)</label>
+          <input type="range" id="speechRateSlider" min="0.7" max="1.2" step="0.05" value="0.92" style="width:100%;">
+        </div>
+        <div>
+          <label class="form-label-custom" style="font-size:0.78rem;">Tone (Pitch)</label>
+          <input type="range" id="speechPitchSlider" min="0.8" max="1.2" step="0.05" value="1.0" style="width:100%;">
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" class="btn-secondary" id="btnTestVoice" style="padding:8px 14px; font-size:0.82rem;">🔊 Test Soft Voice</button>
+        <button type="button" class="btn-primary" id="btnSaveSettings" style="padding:9px 20px; font-size:0.88rem;">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DISCREET CALCULATOR MODAL (PANIC ESCAPE) ================= -->
+  <div class="calculator-modal" id="calculatorModal" role="dialog" aria-modal="true">
+    <div class="calculator-frame">
+      <div class="calc-header">
+        <span>Scientific Calc v2.4</span>
+        <span style="cursor:pointer;" onclick="window.app.toggleDiscreetMode(false)">⚙️</span>
+      </div>
+      <div class="calc-screen" id="calcScreen">0</div>
+      <div class="calc-grid">
+        <button class="calc-btn btn-gray" data-val="C">AC</button>
+        <button class="calc-btn btn-gray" data-val="+/-">±</button>
+        <button class="calc-btn btn-gray" data-val="%">%</button>
+        <button class="calc-btn btn-orange" data-val="÷">÷</button>
+
+        <button class="calc-btn btn-dark" data-val="7">7</button>
+        <button class="calc-btn btn-dark" data-val="8">8</button>
+        <button class="calc-btn btn-dark" data-val="9">9</button>
+        <button class="calc-btn btn-orange" data-val="×">×</button>
+
+        <button class="calc-btn btn-dark" data-val="4">4</button>
+        <button class="calc-btn btn-dark" data-val="5">5</button>
+        <button class="calc-btn btn-dark" data-val="6">6</button>
+        <button class="calc-btn btn-orange" data-val="-">-</button>
+
+        <button class="calc-btn btn-dark" data-val="1">1</button>
+        <button class="calc-btn btn-dark" data-val="2">2</button>
+        <button class="calc-btn btn-dark" data-val="3">3</button>
+        <button class="calc-btn btn-orange" data-val="+">+</button>
+
+        <button class="calc-btn btn-dark btn-wide" data-val="0">0</button>
+        <button class="calc-btn btn-dark" data-val=".">.</button>
+        <button class="calc-btn btn-orange" data-val="=">=</button>
+      </div>
+      <div class="calc-hint">
+        🔒 Screen disguised for safety. Enter <strong>14566</strong> and press <strong>=</strong> to return.
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SOS EMERGENCY COUNTDOWN MODAL ================= -->
+  <div class="sos-overlay-modal" id="sosModal" role="dialog" aria-modal="true">
+    <div class="sos-card-dialog">
+      <div class="sos-icon-pulse">🚨</div>
+      <h2 style="color:var(--text-dark); margin-bottom:4px;">BROADCASTING EMERGENCY SOS</h2>
+      <p style="color:var(--text-muted); font-size:0.88rem;">Transmitting live GPS beacon & high-priority alert to nearest SP SC/ST Protection Cell & Tele-MANAS Unit.</p>
+      
+      <div class="sos-countdown-text" id="sosCountdownText">00:05</div>
+
+      <div class="sos-actions-row">
+        <button class="btn-cancel-sos" id="btnCancelSos">Cancel Broadcast</button>
+        <button class="btn-send-now-sos" id="btnSendNowSos">Dispatch Instantly</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HELPLINE 14566 SIMULATOR MODAL ================= -->
+  <div class="helpline-simulator-modal" id="helplineModal" role="dialog" aria-modal="true">
+    <div class="helpline-call-screen">
+      <button class="call-close-btn" id="btnCloseCallModal" title="Close call">✕</button>
+
+      <div class="call-avatar-pulse">🕊️</div>
+      <h3 style="font-size:1.3rem; margin-bottom:4px;">NHAA 14566 National Helpline</h3>
+      <div style="font-size:0.85rem; color:#A379F7; margin-bottom:6px;">Department of Social Justice & Empowerment</div>
+      <div class="call-timer" id="callTimer">00:00</div>
+
+      <div class="call-waveform">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+
+      <div class="call-live-transcript" id="callTranscript">
+        <em>Connecting to NHAA 14566 AI STAM Gateway...</em>
+      </div>
+
+      <div class="call-controls-row">
+        <button class="call-btn mute" title="Mute" onclick="window.speechService.toggleMute()">🎙️</button>
+        <button class="call-btn end" id="btnEndCall" title="End Call">📞</button>
+        <button class="call-btn speaker" title="Speaker">🔊</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FIRST INFORMATION REPORT / POA RELIEF MODAL ================= -->
+  <div class="sos-overlay-modal" id="firModal" role="dialog" aria-modal="true">
+    <div class="sos-card-dialog" style="max-width:700px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="color:var(--text-dark); margin:0;">📄 SC/ST (PoA) Act Statutory Document</h3>
+        <button id="btnCloseFirModal" style="background:none; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+      
+      <div id="firModalContent" style="max-height:480px; overflow-y:auto;">
+        <!-- Dynamic Content -->
+      </div>
+
+      <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:10px;">
+        <button class="btn-secondary" onclick="window.print()">🖨️ Print / Export PDF</button>
+        <button class="btn-primary" onclick="window.app.showToast('Memo transmitted to District Magistrate & SP SC/ST Cell', 'success'); document.getElementById('firModal').classList.remove('active');">Forward to District SP/DM</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="app-footer">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-title">🕊️ OFFLOAD (NHAA 14566)</div>
+        <div class="footer-slogan">RELEASE YOUR THOUGHTS. FIND YOUR FLOW.</div>
+        <p style="font-size:0.83rem; max-width:440px; color:#94A3B8; line-height:1.5;">
+          A national victim-centric trauma evaluation platform designed for Smart India Hackathon (SIH), combining NLP emotion AI, acoustic speech analytics, PoA statutory relief, and Tele-MANAS psychological care.
+        </p>
+        <div class="footer-pillars">
+          <div class="pillar-item">
+            <strong>🛡️ Statutory PoA Relief</strong>
+            <span>Schedule Annexure-I</span>
+          </div>
+          <div class="pillar-item">
+            <strong>🧠 SVI Index (0-100)</strong>
+            <span>Standardized Triage</span>
+          </div>
+          <div class="pillar-item">
+            <strong>🏥 Tele-MANAS Network</strong>
+            <span>24/7 Trauma Care</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Access Touchpoints</h4>
+        <ul class="footer-links">
+          <li><a href="javascript:void(0)" class="trigger-helpline">National Helpline 14566</a></li>
+          <li><a href="javascript:void(0)" onclick="window.app.switchView('mobile')">Mobile Application OS</a></li>
+          <li><a href="javascript:void(0)" onclick="window.app.switchView('citizen')">Integrated Portal</a></li>
+          <li><a href="javascript:void(0)" class="trigger-sos">Emergency SOS Beacon</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Statutory Schemes</h4>
+        <ul class="footer-links">
+          <li><a href="javascript:void(0)" onclick="window.app.switchView('handbook')">PoA Compensation Scales</a></li>
+          <li><a href="javascript:void(0)" onclick="window.app.switchView('handbook')">Witness Protection 2018</a></li>
+          <li><a href="javascript:void(0)" onclick="window.app.switchView('ecosystem')">Tele-MANAS Network</a></li>
+          <li><a href="javascript:void(0)" onclick="window.app.switchView('handbook')">Zero FIR & PoA Sec 4</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">National Helpline NHAA</h4>
+        <div style="background:rgba(255,255,255,0.05); padding:14px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:1.2rem; font-weight:800; color:#FFFFFF;">📞 14566</div>
+          <div style="font-size:0.75rem; color:#94A3B8; margin:4px 0 10px 0;">Toll-Free 24x7 National Helpline Against Atrocities</div>
+          <button class="btn-primary trigger-helpline" style="width:100%; justify-content:center; padding:7px 12px; font-size:0.8rem;">Direct Voice Connect</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPACT BANNER -->
+    <div class="footer-impact-banner">
+      <span>REAL PEOPLE</span>
+      <span class="accent">+</span>
+      <span>SMART TECHNOLOGY</span>
+      <span class="accent">=</span>
+      <span>GREATER IMPACT</span>
+    </div>
+
+    <div class="footer-bottom">
+      <div>Department of Social Justice and Empowerment (DoSJE) • Government of India</div>
+      <div>Designed for Smart India Hackathon (SIH) • Made with ❤️ for Dignity & Justice</div>
+    </div>
+  </footer>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/aiEngine.js"></script>
+  <script src="js/geminiService.js"></script>
+  <script src="js/speechService.js"></script>
+  <script src="js/geoService.js"></script>
+  <script src="js/citizenPortal.js"></script>
+  <script src="js/caseworkerDashboard.js"></script>
+  <script src="js/mobileApp.js"></script>
+  <script src="js/helplineSimulator.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

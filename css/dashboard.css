@@ -517,14 +517,72 @@
   border-radius: var(--radius-md);
 }
 
+/* ================= CASEWORKER DASHBOARD RESPONSIVE STYLES ================= */
 @media (max-width: 1024px) {
   .stats-row {
     grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
   .dashboard-main-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
   .analytics-section-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .queue-panel {
+    height: 520px;
+  }
+  .panel-header-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+  }
+  .queue-filters {
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+  .filter-chip-btn {
+    padding: 4px 9px;
+    font-size: 0.72rem;
+  }
+  .inspector-header {
+    padding: 14px 16px;
+  }
+  .inspector-body {
+    padding: 14px;
+  }
+  .inspector-actions-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 14px 16px;
+  }
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  .stat-icon-bubble {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+  }
+  .radar-bars-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
   }
 }

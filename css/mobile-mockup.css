@@ -54,14 +54,16 @@
 
 /* ================= SMARTPHONE CHASSIS ================= */
 .smartphone-frame {
-  width: 360px;
+  width: 100%;
+  max-width: 360px;
   height: 720px;
   background: #0B0F19;
-  border-radius: 50px;
+  border-radius: 46px;
   padding: 12px;
   box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25), 0 0 0 4px #1E293B;
   position: relative;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .phone-island {
@@ -492,5 +494,20 @@
 @media (max-width: 1024px) {
   .mobile-preview-layout {
     grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .smartphone-frame {
+    height: 660px;
+    border-radius: 36px;
+    padding: 8px;
+  }
+  .phone-screen {
+    border-radius: 30px;
+  }
+  .phone-hero-banner {
+    padding: 16px 14px;
   }
 }

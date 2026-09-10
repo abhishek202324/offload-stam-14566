@@ -972,11 +972,151 @@ input:checked + .slider-round:before { transform: translateX(18px); }
   box-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
 }
 
+/* ================= CITIZEN PORTAL RESPONSIVE STYLES ================= */
 @media (max-width: 900px) {
-  .citizen-hero { padding: 18px; }
-  .hero-content-grid { grid-template-columns: 1fr; }
-  .channels-grid { grid-template-columns: 1fr; }
-  .facilities-grid-6 { grid-template-columns: 1fr; }
-  .citizen-workspace-grid { grid-template-columns: 1fr; }
-  .hero-title { font-size: 1.9rem; }
+  .citizen-hero {
+    padding: 24px 20px;
+  }
+  
+  .hero-content-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .channels-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .facilities-grid-6 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .citizen-workspace-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ai-companion-box,
+  .incident-wizard-box {
+    height: 560px;
+  }
+}
+
+@media (max-width: 600px) {
+  .citizen-hero {
+    padding: 18px 14px;
+    border-radius: var(--radius-md);
+  }
+
+  .hero-title {
+    font-size: 1.65rem;
+    line-height: 1.22;
+  }
+
+  .hero-desc {
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+  }
+
+  .hero-quote-box {
+    font-size: 0.8rem;
+    padding: 8px 10px;
+    margin-bottom: 16px;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-primary-hero,
+  .btn-secondary-hero {
+    width: 100%;
+    justify-content: center;
+    padding: 9px 16px;
+    font-size: 0.86rem;
+  }
+
+  .hero-banner-img {
+    height: 190px;
+  }
+
+  .facilities-section {
+    padding: 18px 14px;
+  }
+
+  .facilities-grid-6 {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .facility-card {
+    padding: 14px;
+  }
+
+  .ai-companion-box {
+    height: 500px;
+  }
+
+  .incident-wizard-box {
+    height: auto;
+    min-height: 500px;
+  }
+
+  .chat-msg {
+    max-width: 94%;
+  }
+
+  .category-selection-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .chat-quick-prompts {
+    padding: 5px 8px;
+    gap: 4px;
+  }
+
+  .prompt-chip {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  .chat-input-area {
+    padding: 6px 8px;
+    gap: 4px;
+  }
+
+  .chat-input-box {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+
+  .btn-mic-voice,
+  .btn-send-chat {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+
+  .sos-card-dialog {
+    padding: 20px 14px;
+    border-radius: var(--radius-md);
+  }
+
+  .sos-icon-pulse {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+
+  .sos-countdown-text {
+    font-size: 1.5rem;
+  }
 }
